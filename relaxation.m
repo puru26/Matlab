@@ -1,16 +1,21 @@
-function x= gausssei(a,b,x0,imax,rer)
+function x= relaxation(a,b,x0,lambda,imax,rer)
 t=size(a);
 n=t(1);
 if nargin<3 
     disp('initial guess not provided , using default initial guess')
     x0=ones(n,1);
+    lambda=1;
     imax=100;
     rer=1e-3;
 elseif nargin<4
+    lambda=1;
         imax=100;
         rer=1e-3;
 elseif nargin<5
+    imax=100;
             rer=1e-3;
+elseif nargin<6
+    rer=1e-3;
 end
 if t(1)~=t(2)
     disp('a is not a square matrix')
@@ -75,18 +80,15 @@ for i=1:imax
         end
         x(j)=b(j)-sum;
     end
-    
+    x=x0+lambda*(x-x0);
     res= b-a*x;
     rel_error=norm(res)/norm(b);
     if rel_error<rer
         disp('convergence achieved in num2str(i) iterations')
-        break;
-    elseif i== imax
+    elseif i==imax
         disp('max iteratuions reached without convergence')
     else x0=x;
     end
 end
 end
 end
-        
-            
